@@ -10,7 +10,7 @@ const brandLogo = "/assets/svg/brand.svg";
 const Header = () => {
   return (
     <>
-      <Navbar className="bg-warning py-3">
+      <Navbar className="bg-warning py-2">
         <Container fluid className="px-3">
           <Link href="/">
             <a>

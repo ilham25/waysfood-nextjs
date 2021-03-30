@@ -83,7 +83,7 @@ const ProfileButton = () => {
         <Dropdown.Menu
           style={{
             position: "absolute",
-            left: 0 == 1 ? "-100px" : "-50px",
+            left: 1 == 1 ? "-100px" : "-50px",
             fontSize: "1.2em",
           }}
         >
@@ -93,7 +93,7 @@ const ProfileButton = () => {
               Profile
             </Dropdown.Item>
           </Link>
-          {0 == 1 && (
+          {1 == 1 && (
             <Link href="/add">
               <Dropdown.Item as="a" href="/add" className="py-2">
                 <img
