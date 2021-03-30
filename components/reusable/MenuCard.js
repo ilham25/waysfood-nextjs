@@ -1,7 +1,18 @@
+import { useContext } from "react";
 import { Col, Card, Button } from "react-bootstrap";
 
-const MenuCard = () => {
-  const handleOrder = () => {};
+// State Management
+import { CartContext } from "../../contexts/cartContext";
+
+const MenuCard = ({ data, idx }) => {
+  const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
+  const { id, title, price } = data;
+  const handleOrder = () => {
+    cartDispatch({
+      type: "ADD_CART",
+      payload: data,
+    });
+  };
 
   return (
     <>
@@ -10,7 +21,7 @@ const MenuCard = () => {
           <Card style={{ border: "none", cursor: "pointer" }}>
             <Card.Img
               variant="top"
-              src="https://picsum.photos/175"
+              src={`https://picsum.photos/175?random=${idx}`}
               height="175"
               className="p-3"
               style={{ objectFit: "cover" }}
@@ -20,11 +31,10 @@ const MenuCard = () => {
                 className="heading font-weight-bolder mb-0"
                 style={{ height: "40px" }}
               >
-                Menu 1
+                {title}
               </Card.Title>
               <Card.Text className="heading text-danger">
-                {/* Rp. {price.toLocaleString()} */}
-                Rp. 15.000
+                Rp. {price.toLocaleString()}
               </Card.Text>
               <Button
                 variant="warning"

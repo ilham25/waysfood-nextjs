@@ -1,6 +1,7 @@
 import { Container, Col, Row, Card } from "react-bootstrap";
 
-const PopularCard = () => {
+const PopularCard = ({ data, idx }) => {
+  const { firstName, lastName } = data;
   return (
     <>
       <Col sm={3}>
@@ -9,7 +10,7 @@ const PopularCard = () => {
             <Row>
               <Col sm={3} className="text-center">
                 <img
-                  src="/assets/img/burger-king.png"
+                  src={`https://picsum.photos/100?random=${idx}`}
                   height="64"
                   width="64"
                   style={{
@@ -19,7 +20,9 @@ const PopularCard = () => {
                 />
               </Col>
               <Col sm={9} className="my-auto text-center pl-4">
-                <h3 className="heading font-weight-bold my-0">Burger King</h3>
+                <h3 className="heading font-weight-bold my-0">
+                  {firstName} {lastName}
+                </h3>
               </Col>
             </Row>
           </Card.Body>

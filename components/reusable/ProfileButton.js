@@ -4,6 +4,10 @@ import { useContext, useState, useEffect } from "react";
 
 import { Dropdown } from "react-bootstrap";
 
+// State Management
+import { CartContext } from "../../contexts/cartContext";
+import { UserContext } from "../../contexts/userContext";
+
 // Assets
 const iconProfile = "/assets/svg/profile.svg";
 const iconAddProduct = "/assets/svg/addproduct.svg";
@@ -15,25 +19,27 @@ const bensu = "/assets/img/restaurant/bensu.png";
 const ProfileButton = () => {
   const router = useRouter();
 
-  //   const { state: userState, dispatch: userDispatch } = useContext(UserContext);
-  //   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
+  const { state: userState, dispatch: userDispatch } = useContext(UserContext);
+  const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
 
   const handleLogout = () => {
-    // cartDispatch({
-    //   type: "EMPTY_CART",
-    // });
-    // userDispatch({
-    //   type: "LOGOUT",
-    // });
-    // history.location.pathname !== "/" && history.push("/");
+    cartDispatch({
+      type: "EMPTY_CART",
+    });
+    userDispatch({
+      type: "LOGOUT",
+    });
+    router.pathname !== "/" && router.push("/");
   };
 
   return (
     <>
-      <Link href={0 == 1 ? "/income" : "/cart"}>
+      <Link
+        href={userState.loggedUser.role === "PARTNER" ? "/income" : "/cart"}
+      >
         <a>
           <div style={{ width: "40px", height: "40px", position: "relative" }}>
-            {0 > 0 && (
+            {cartState.carts.length > 0 && (
               <div
                 className="cart-badge"
                 style={{
@@ -53,7 +59,7 @@ const ProfileButton = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  10
+                  {cartState.carts.length.toString()}
                 </small>
               </div>
             )}
@@ -72,7 +78,7 @@ const ProfileButton = () => {
           }}
         >
           <img
-            src={0 == 1 ? bensu : imgProfile}
+            src={userState.loggedUser.role === "PARTNER" ? bensu : imgProfile}
             alt="photo"
             width="64"
             height="64"
@@ -83,7 +89,7 @@ const ProfileButton = () => {
         <Dropdown.Menu
           style={{
             position: "absolute",
-            left: 1 == 1 ? "-100px" : "-50px",
+            left: userState.loggedUser.role === "PARTNER" ? "-100px" : "-50px",
             fontSize: "1.2em",
           }}
         >
@@ -93,7 +99,7 @@ const ProfileButton = () => {
               Profile
             </Dropdown.Item>
           </Link>
-          {1 == 1 && (
+          {userState.loggedUser.role === "PARTNER" && (
             <Link href="/add">
               <Dropdown.Item as="a" href="/add" className="py-2">
                 <img

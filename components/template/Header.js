@@ -1,6 +1,11 @@
 import Link from "next/link";
+import { useContext } from "react";
 
 import { Navbar, Container } from "react-bootstrap";
+
+// State Management
+import { UserContext } from "../../contexts/userContext";
+import { CartContext } from "../../contexts/cartContext";
 
 import NavButton from "../reusable/NavButton";
 import ProfileButton from "../reusable/ProfileButton";
@@ -9,6 +14,8 @@ import ProfileButton from "../reusable/ProfileButton";
 const brandLogo = "/assets/svg/brand.svg";
 
 const Header = () => {
+  const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
+  const { state: userState, dispatch: userDispatch } = useContext(UserContext);
   return (
     <>
       <Navbar className="bg-warning py-2">
@@ -22,8 +29,7 @@ const Header = () => {
           </Link>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
-            <NavButton />
-            {/* <ProfileButton /> */}
+            {userState.isLogin ? <ProfileButton /> : <NavButton />}
           </Navbar.Collapse>
         </Container>
       </Navbar>

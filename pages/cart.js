@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
   Container,
   Row,
@@ -7,9 +8,13 @@ import {
   FormControl,
 } from "react-bootstrap";
 
+// State Management
+import { CartContext } from "../contexts/cartContext";
+
 import CartOrder from "../components/reusable/CartOrder";
 
 const Cart = () => {
+  const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
   return (
     <>
       <div className="bg-grey py-5 mt-4">
@@ -30,12 +35,9 @@ const Cart = () => {
           <Row>
             <Col sm={12} lg={7}>
               <hr className="divider" />
-              {/* {cartState.carts.map((cart) => (
-            ))} */}
-              <CartOrder />
-              <CartOrder />
-              <CartOrder />
-              <CartOrder />
+              {cartState.carts.map((cart, idx) => (
+                <CartOrder key={idx} data={cart} idx={idx} />
+              ))}
             </Col>
             <Col lg={5}>
               <hr className="divider d-none d-lg-block" />

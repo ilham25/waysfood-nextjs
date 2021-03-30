@@ -3,48 +3,43 @@ import { useContext } from "react";
 import { Row, Col, Button } from "react-bootstrap";
 
 // State Management
-// import { CartContext } from "../../contexts/cartContext";
+import { CartContext } from "../../contexts/cartContext";
 
 // Assets
 const iconRemove = "/assets/svg/remove.svg";
 
-export default function CartOrder({ data }) {
-  //   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
+export default function CartOrder({ data, idx }) {
+  const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
 
-  //   const { id, photo, title, price, qty } = data;
+  const { id, title, price, qty } = data;
 
   const handleRemoveCart = () => {
-    // cartDispatch({
-    //   type: "REMOVE_CART",
-    //   payload: data,
-    // });
+    cartDispatch({
+      type: "REMOVE_CART",
+      payload: data,
+    });
   };
 
   const handleAddCart = () => {
-    // cartDispatch({
-    //   type: "ADD_CART",
-    //   payload: data,
-    // });
+    cartDispatch({
+      type: "ADD_CART",
+      payload: data,
+    });
   };
 
   const handleDeleteCart = () => {
-    // cartDispatch({
-    //   type: "DELETE_CART",
-    //   payload: data,
-    // });
+    cartDispatch({
+      type: "DELETE_CART",
+      payload: data,
+    });
   };
 
   return (
-    <div
-      exit={{ y: "-50vh" }}
-      initial={{ y: "50vh" }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, delay: 0.5, type: "spring" }}
-    >
+    <div>
       <Row>
         <Col xs={3} md={2}>
           <img
-            src={"https://picsum.photos/175"}
+            src={`https://picsum.photos/175?random=${idx}`}
             alt="order 1"
             style={{
               backgroundSize: "cover",
@@ -58,15 +53,11 @@ export default function CartOrder({ data }) {
         <Col xs={9} md={10} className="py-2">
           <Row>
             <Col xs={6} md={6}>
-              <p className="heading font-weight-bold">
-                {/* {title} */}
-                Menu
-              </p>
+              <p className="heading font-weight-bold">{title}</p>
             </Col>
             <Col xs={6} md={6}>
               <p className="text-danger text-right">
-                {/* Rp. {price.toLocaleString()} */}
-                Rp. 15.000
+                Rp. {price.toLocaleString()}
               </p>
             </Col>
           </Row>
@@ -90,8 +81,7 @@ export default function CartOrder({ data }) {
                   borderRadius: "5px",
                 }}
               >
-                {/* {data.qty} */}
-                10
+                {qty}
               </p>
               <Button
                 variant="light"

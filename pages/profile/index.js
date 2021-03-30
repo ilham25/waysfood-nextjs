@@ -1,4 +1,8 @@
 import Link from "next/link";
+import { useContext } from "react";
+
+// State Management
+import { UserContext } from "../../contexts/userContext";
 
 import { Container, Row, Col, Button } from "react-bootstrap";
 import HistoryCard from "../../components/reusable/HistoryCard";
@@ -8,6 +12,8 @@ const imgProfileBig = "/assets/img/profile-big.png";
 const bensu = "/assets/img/restaurant/bensu.png";
 
 const Profile = () => {
+  const { state: userState, dispatch: userDispatch } = useContext(UserContext);
+  const { firstName, lastName, email, phone } = userState.loggedUser;
   return (
     <>
       <div className="bg-grey py-5 mt-4">
@@ -22,7 +28,11 @@ const Profile = () => {
               <Row className="mb-2">
                 <Col sm={12} md={4}>
                   <img
-                    src={0 ? bensu : imgProfileBig}
+                    src={
+                      userState.loggedUser.role === "PARTNER"
+                        ? bensu
+                        : imgProfileBig
+                    }
                     alt="profile photo"
                     className="w-100 mb-4 mb-sm-0"
                     height="222"
@@ -36,8 +46,7 @@ const Profile = () => {
                     </Col>
                     <Col md={12}>
                       <p>
-                        {/* {fullname} */}
-                        Ilham Adiputra
+                        {firstName} {lastName}
                       </p>
                     </Col>
                   </Row>
@@ -46,10 +55,7 @@ const Profile = () => {
                       <h5 className="text-brown">Email</h5>
                     </Col>
                     <Col md={12}>
-                      <p>
-                        {/* {email} */}
-                        email@gmail.com
-                      </p>
+                      <p>{email}</p>
                     </Col>
                   </Row>
                   <Row className="mb-2">
@@ -57,10 +63,7 @@ const Profile = () => {
                       <h5 className="text-brown">Phone</h5>
                     </Col>
                     <Col md={12}>
-                      <p>
-                        {/* {phone} */}
-                        081237123945
-                      </p>
+                      <p>{phone}</p>
                     </Col>
                   </Row>
                 </Col>
