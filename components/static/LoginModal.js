@@ -24,7 +24,7 @@ export default function LoginModal({}) {
     modalDispatch({ type: "OPEN_REGISTER" });
   };
 
-  const [handleLogin, { data, error }] = useMutation(LOGIN_MUTATION);
+  const [handleLogin, { error }] = useMutation(LOGIN_MUTATION);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +33,7 @@ export default function LoginModal({}) {
       password: e.target.password.value,
     };
     try {
-      await handleLogin({
+      const { data } = await handleLogin({
         variables: { email: userData.email, password: userData.password },
       });
       userDispatch({
