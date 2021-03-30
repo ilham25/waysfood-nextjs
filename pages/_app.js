@@ -8,7 +8,7 @@ import { CartContextProvider } from "../contexts/cartContext";
 import { ModalContextProvider } from "../contexts/modalContext";
 
 // Apollo Client
-import client from "../utils/client";
+import client from "../utils/apollo-client";
 
 import Layout from "../components/template/Layout";
 

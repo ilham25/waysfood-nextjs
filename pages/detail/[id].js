@@ -1,8 +1,12 @@
 import { useQuery } from "@apollo/client";
+import { useContext } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
+// State Management
+import { CartContext } from "../../contexts/cartContext";
+
 // GraphQL Query and Mutation
-import client from "../../utils/client";
+import client from "../../utils/apollo-client";
 import { ALL_PRODUCTS, ALL_USERS } from "../../utils/graphql/queries";
 
 import MenuCard from "../../components/reusable/MenuCard";
@@ -46,6 +50,7 @@ export const getStaticProps = async (context) => {
 };
 
 const Detail = ({ products }) => {
+  const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
   return (
     <>
       <div className="bg-grey py-5 mt-4">
@@ -53,7 +58,7 @@ const Detail = ({ products }) => {
           <Row>
             <Col xs={12}>
               <h1 className="heading font-weight-bold mb-4">
-                Restaurant, Menus
+                {cartState?.currentRestaurant?.fullName}, Menus
               </h1>
             </Col>
           </Row>

@@ -1,4 +1,5 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
+import { useMutation } from "@apollo/client";
 import {
   Container,
   Row,
@@ -11,10 +12,59 @@ import {
 // State Management
 import { CartContext } from "../contexts/cartContext";
 
+// GraphQL Query and Mutation
+import { INSERT_TRANSACTION, INSERT_ORDERS } from "../utils/graphql/mutations";
+
 import CartOrder from "../components/reusable/CartOrder";
 
 const Cart = () => {
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
+
+  const [quantity, setQuantity] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [delivery, setDelivery] = useState(10000);
+  const [total, setTotal] = useState(0);
+
+  const [insertTransaction, { error: errTrans }] = useMutation(
+    INSERT_TRANSACTION
+  );
+  const [insertOrders, { error: errOrders }] = useMutation(INSERT_ORDERS);
+
+  const handleOrder = async () => {
+    try {
+      const { data: transData } = await insertTransaction({
+        variables: { partnerId: cartState.currentRestaurant.id },
+      });
+      const products = [
+        ...cartState.carts.map((cart) => ({
+          productId: cart.id,
+          transactionId: transData.createTransaction.id,
+          qty: cart.qty,
+        })),
+      ];
+      const { data: ordersData } = await insertOrders({
+        variables: { inputs: products },
+      });
+      console.log(ordersData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    let tmpQty = 0;
+    let tmpPrice = 0;
+
+    cartState.carts.map((cart) => {
+      tmpQty = tmpQty + cart.qty;
+      tmpPrice = tmpPrice + cart.price * cart.qty;
+    });
+
+    setQuantity(tmpQty);
+    setPrice(tmpPrice);
+    setTotal(tmpPrice + delivery);
+  }, [cartState.carts]);
+
   return (
     <>
       <div className="bg-grey py-5 mt-4">
@@ -47,8 +97,7 @@ const Cart = () => {
                 </Col>
                 <Col xs={6} lg={6}>
                   <p className="text-right text-danger">
-                    {/* Rp. {price.toLocaleString()} */}
-                    Rp. 10.000
+                    Rp. {price.toLocaleString()}
                   </p>
                 </Col>
               </Row>
@@ -57,10 +106,7 @@ const Cart = () => {
                   <p>Qty</p>
                 </Col>
                 <Col xs={6} lg={6}>
-                  <p className="text-right">
-                    {/* {quantity} */}
-                    10
-                  </p>
+                  <p className="text-right">{quantity}</p>
                 </Col>
               </Row>
               <Row className="pb-0">
@@ -69,8 +115,7 @@ const Cart = () => {
                 </Col>
                 <Col xs={6} lg={6}>
                   <p className="text-right text-danger mb-0">
-                    {/* Rp. {delivery.toLocaleString()} */}
-                    Rp. 15.000
+                    Rp. {delivery.toLocaleString()}
                   </p>
                 </Col>
               </Row>
@@ -81,14 +126,17 @@ const Cart = () => {
                 </Col>
                 <Col xs={6} lg={6}>
                   <p className="text-right text-danger font-weight-bold mb-0">
-                    {/* Rp. {total.toLocaleString()} */}
-                    Rp. 20.000
+                    Rp. {total.toLocaleString()}
                   </p>
                 </Col>
               </Row>
               <Row className="mt-5 justify-content-end">
                 <Col sm={8} className="text-right mt-5">
-                  <Button variant="brown" className="w-100 ">
+                  <Button
+                    variant="brown"
+                    className="w-100"
+                    onClick={handleOrder}
+                  >
                     Order
                   </Button>
                 </Col>

@@ -16,3 +16,34 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `;
+
+export const INSERT_TRANSACTION = gql`
+  mutation($partnerId: String!) {
+    createTransaction(input: { partnerId: $partnerId, status: "waiting" }) {
+      id
+      status
+    }
+  }
+`;
+
+export const INSERT_ORDERS = gql`
+  mutation($inputs: [CreateOrderInput]) {
+    createOrders(inputs: $inputs) {
+      results {
+        id
+        product {
+          id
+          title
+        }
+        transaction {
+          id
+          status
+        }
+        createdBy {
+          id
+          email
+        }
+      }
+    }
+  }
+`;
