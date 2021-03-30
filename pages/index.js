@@ -2,6 +2,8 @@ import { Container, Col, Row } from "react-bootstrap";
 import HeroSection from "../components/static/HeroSection";
 import PopularCard from "../components/reusable/PopularCard";
 import RestaurantCard from "../components/reusable/RestaurantCard";
+import LoginModal from "../components/static/LoginModal";
+import RegisterModal from "../components/static/RegisterModal";
 
 export default function Home() {
   return (
@@ -25,6 +27,8 @@ export default function Home() {
           <RestaurantCard />
         </Row>
       </Container>
+      <LoginModal />
+      <RegisterModal />
     </>
   );
 }

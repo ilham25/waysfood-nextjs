@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { Navbar, Container } from "react-bootstrap";
 
 import NavButton from "../reusable/NavButton";
@@ -21,8 +22,8 @@ const Header = () => {
           </Link>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
-            {/* <NavButton /> */}
-            <ProfileButton />
+            <NavButton />
+            {/* <ProfileButton /> */}
           </Navbar.Collapse>
         </Container>
       </Navbar>
