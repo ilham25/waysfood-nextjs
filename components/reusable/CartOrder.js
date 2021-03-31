@@ -11,7 +11,7 @@ const iconRemove = "/assets/svg/remove.svg";
 export default function CartOrder({ data, idx }) {
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
 
-  const { id, title, price, qty } = data;
+  const { id, title, price, qty, image } = data;
 
   const handleRemoveCart = () => {
     cartDispatch({
@@ -39,7 +39,7 @@ export default function CartOrder({ data, idx }) {
       <Row>
         <Col xs={3} md={2}>
           <img
-            src={`https://picsum.photos/175?random=${idx}`}
+            src={image}
             alt="order 1"
             style={{
               backgroundSize: "cover",

@@ -87,3 +87,12 @@ export const UPDATE_PRODUCT = gql`
     }
   }
 `;
+
+export const UPDATE_TRANSACTION = gql`
+  mutation($status: String!, $id: String!) {
+    updateTransaction(input: { status: $status }, id: $id) {
+      id
+      status
+    }
+  }
+`;

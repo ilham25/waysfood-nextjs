@@ -9,6 +9,7 @@ import {
   InputGroup,
   FormControl,
 } from "react-bootstrap";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 // State Management
 import { CartContext } from "../contexts/cartContext";
@@ -26,6 +27,27 @@ const Cart = () => {
   const [price, setPrice] = useState(0);
   const [delivery, setDelivery] = useState(10000);
   const [total, setTotal] = useState(0);
+
+  const [alert, setAlert] = useState(null);
+  const hideAlert = () => {
+    setAlert(null);
+    router.push("/profile");
+    cartDispatch({
+      type: "EMPTY_CART",
+    });
+  };
+  const showAlert = () => {
+    setAlert(
+      <SweetAlert
+        success
+        title="Order Success!"
+        onConfirm={() => hideAlert()}
+        onCancel={() => hideAlert()}
+      >
+        Your order is being processed
+      </SweetAlert>
+    );
+  };
 
   const [insertTransaction, { error: errTrans }] = useMutation(
     INSERT_TRANSACTION
@@ -47,10 +69,7 @@ const Cart = () => {
       const { data: ordersData } = await insertOrders({
         variables: { inputs: products },
       });
-      ordersData && router.push("/profile");
-      cartDispatch({
-        type: "EMPTY_CART",
-      });
+      ordersData && showAlert();
     } catch (error) {
       console.log(error);
     }
@@ -150,6 +169,7 @@ const Cart = () => {
           </Row>
         </Container>
       </div>
+      {alert}
     </>
   );
 };
