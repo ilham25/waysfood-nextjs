@@ -12,7 +12,7 @@ const RestaurantCard = ({ data, idx }) => {
     CartContext
   );
 
-  const { id, firstName, lastName } = data;
+  const { id, firstName, lastName, image } = data;
 
   const handleClick = () => {
     cartDispatch({
@@ -34,7 +34,7 @@ const RestaurantCard = ({ data, idx }) => {
           <Card.Img
             variant="top"
             height="200"
-            src={`https://picsum.photos/200?random=${idx}`}
+            src={image}
             className="p-3"
             style={{ objectFit: "cover" }}
           />
@@ -42,7 +42,7 @@ const RestaurantCard = ({ data, idx }) => {
             <Card.Title className="heading font-weight-bolder">
               {firstName} {lastName}
             </Card.Title>
-            <Card.Text className="heading">Makanan</Card.Text>
+            <Card.Text className="heading">Restaurant</Card.Text>
           </Card.Body>
         </Card>
       </Col>

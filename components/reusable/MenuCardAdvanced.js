@@ -7,7 +7,12 @@ import { Col, Card, Button } from "react-bootstrap";
 import { CartContext } from "../../contexts/cartContext";
 import { DELETE_PRODUCT } from "../../utils/graphql/mutations";
 
-export default function MenuCardAdvanced({ data, refetch, setEditId }) {
+export default function MenuCardAdvanced({
+  data,
+  refetch,
+  setEditId,
+  setForm,
+}) {
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
 
   const [deleteProduct, { error }] = useMutation(DELETE_PRODUCT);
@@ -22,6 +27,14 @@ export default function MenuCardAdvanced({ data, refetch, setEditId }) {
     } catch (error) {
       console.log("prodDel", error);
     }
+  };
+  const handleEdit = async () => {
+    setEditId(data.id);
+    setForm({
+      title: data?.title,
+      price: data?.price,
+      image: data?.image,
+    });
   };
   return (
     <>
@@ -50,7 +63,7 @@ export default function MenuCardAdvanced({ data, refetch, setEditId }) {
                   variant="success"
                   size="sm"
                   style={{ width: "90px" }}
-                  onClick={() => setEditId(data.id)}
+                  onClick={handleEdit}
                 >
                   Edit
                 </Button>

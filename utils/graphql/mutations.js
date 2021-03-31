@@ -73,3 +73,17 @@ export const DELETE_PRODUCT = gql`
     }
   }
 `;
+
+export const UPDATE_PRODUCT = gql`
+  mutation($id: String!, $title: String, $image: String, $price: Int) {
+    updateProduct(
+      input: { title: $title, image: $image, price: $price }
+      id: $id
+    ) {
+      id
+      title
+      image
+      price
+    }
+  }
+`;

@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
-import { useContext, useState } from "react";
-import { useMutation, useQuery } from "@apollo/client";
+import { useContext, useEffect, useState } from "react";
+import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
 import { Container, Col, Row, Form, Button, Modal } from "react-bootstrap";
 
 // State Management
 import { UserContext } from "../contexts/userContext";
 
 // GraphQL Query and Mutation
-import { INSERT_PRODUCT } from "../utils/graphql/mutations";
-import { ALL_PRODUCTS } from "../utils/graphql/queries";
+import { INSERT_PRODUCT, UPDATE_PRODUCT } from "../utils/graphql/mutations";
+import { ALL_PRODUCTS, EACH_PRODUCT } from "../utils/graphql/queries";
 
 // Components
 import CustomFormInput from "../components/static/CustomFormInput";
@@ -18,49 +18,81 @@ import MenuCardAdvanced from "../components/reusable/MenuCardAdvanced";
 const Add = () => {
   const router = useRouter();
   const { state: userState, dispatch: userDispatch } = useContext(UserContext);
-  const [editId, setEditId] = useState("s");
 
-  const [insertProduct, { error }] = useMutation(INSERT_PRODUCT);
+  const [editId, setEditId] = useState("");
+  const [form, setForm] = useState({
+    title: "",
+    price: 0,
+    image: "",
+  });
+  const { title, price, image } = form;
 
-  const { loading, error: productError, data, refetch } = useQuery(
-    ALL_PRODUCTS
-  );
-  console.log("data", data);
+  const [insertProduct, { error: insErr }] = useMutation(INSERT_PRODUCT);
+  const [updateProduct, { error: updErr }] = useMutation(UPDATE_PRODUCT);
+
+  const { loading, data, refetch } = useQuery(ALL_PRODUCTS);
 
   const products = data?.products?.filter(
     (item) => item.createdBy.id === userState?.loggedUser?.id
   );
 
-  const addProduct = async (formData) => {
+  const addProduct = async () => {
+    console.log("aoweko");
     try {
+      console.log("lel");
       const { data } = await insertProduct({
-        variables: formData,
+        variables: { ...form, price: parseInt(form.price) },
       });
-      data && router.push("/profile");
+      data && refetch();
+      setForm({
+        title: "",
+        price: 0,
+        image: "",
+      });
     } catch (error) {
       console.log("prod", error);
     }
   };
 
-  const updateProduct = async () => {};
+  const editProduct = async () => {
+    try {
+      const { data } = await updateProduct({
+        variables: { ...form, price: parseInt(form.price), id: editId },
+      });
+      data && refetch();
+      setEditId("");
+      setForm({
+        title: "",
+        price: 0,
+        image: "",
+      });
+    } catch (error) {
+      console.log("ed", error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = {
-      title: e.target.title.value,
-      price: parseInt(e.target.price.value),
-      image: e.target.image.value,
-    };
-    editId ? updateProduct(formData) : addProduct(formData);
-    // handleShow();
+
+    editId ? editProduct() : addProduct();
   };
+
+  const onChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   return (
     <>
       <div className="bg-grey py-5 mt-4">
         <Container>
           <Row className="mb-4">
             <Col xs={12}>
-              <h1 className="heading font-weight-bold">Add Product</h1>
+              <h1 className="heading font-weight-bold">
+                {editId ? "Edit" : "Add"} Product
+              </h1>
             </Col>
           </Row>
           <Row>
@@ -74,6 +106,8 @@ const Add = () => {
                         type="text"
                         placeholder="Title"
                         name="title"
+                        value={title}
+                        onChange={(e) => onChange(e)}
                       />
                     </Form.Group>
                   </Col>
@@ -86,6 +120,8 @@ const Add = () => {
                         type="text"
                         placeholder="Image URL"
                         name="image"
+                        value={image}
+                        onChange={(e) => onChange(e)}
                       />
                     </Form.Group>
                   </Col>
@@ -98,6 +134,8 @@ const Add = () => {
                         type="number"
                         placeholder="Price"
                         name="price"
+                        value={price}
+                        onChange={(e) => onChange(e)}
                       />
                     </Form.Group>
                   </Col>
@@ -123,7 +161,13 @@ const Add = () => {
               <h2>Loading...</h2>
             ) : (
               products?.map((product, idx) => (
-                <MenuCardAdvanced key={idx} data={product} refetch={refetch} />
+                <MenuCardAdvanced
+                  key={idx}
+                  data={product}
+                  refetch={refetch}
+                  setEditId={setEditId}
+                  setForm={setForm}
+                />
               ))
             )}
           </Row>

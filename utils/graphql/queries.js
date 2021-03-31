@@ -8,6 +8,7 @@ export const ALL_USERS = gql`
       firstName
       lastName
       role
+      image
     }
   }
 `;
@@ -67,6 +68,17 @@ export const ALL_ORDERS = gql`
         price
       }
       qty
+    }
+  }
+`;
+
+export const EACH_PRODUCT = gql`
+  query($id: String!) {
+    product(id: $id) {
+      id
+      title
+      price
+      image
     }
   }
 `;
