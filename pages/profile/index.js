@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { useContext } from "react";
+import { useRouter } from "next/router";
+import { useContext, useEffect } from "react";
+import { useQuery } from "@apollo/client";
 
 // State Management
 import { UserContext } from "../../contexts/userContext";
@@ -7,13 +9,31 @@ import { UserContext } from "../../contexts/userContext";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import HistoryCard from "../../components/reusable/HistoryCard";
 
+// GraphQL Query and Mutation
+import { ALL_TRANSACTIONS, ALL_ORDERS } from "../../utils/graphql/queries";
+
 // Assets
 const imgProfileBig = "/assets/img/profile-big.png";
 const bensu = "/assets/img/restaurant/bensu.png";
 
 const Profile = () => {
+  const router = useRouter();
   const { state: userState, dispatch: userDispatch } = useContext(UserContext);
-  const { firstName, lastName, email, phone } = userState.loggedUser;
+
+  const { id, firstName, lastName, email, phone } = userState.loggedUser;
+
+  const {
+    loading: transLoading,
+    error: transError,
+    data: transData,
+    refetch: transRefetch,
+  } = useQuery(ALL_TRANSACTIONS);
+
+  useEffect(() => {
+    transRefetch();
+  }, []);
+
+  console.log(transData);
   return (
     <>
       <div className="bg-grey py-5 mt-4">
@@ -105,9 +125,13 @@ const Profile = () => {
                         />
                       )
                 )} */}
-                <HistoryCard />
-                <HistoryCard />
-                <HistoryCard />
+                {transLoading ? (
+                  <h3>Loading...</h3>
+                ) : (
+                  transData?.transactions?.map((trans, idx) => (
+                    <HistoryCard key={idx} data={trans} />
+                  ))
+                )}
               </Row>
             </Col>
           </Row>

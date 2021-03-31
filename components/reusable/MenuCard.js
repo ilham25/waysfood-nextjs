@@ -6,7 +6,7 @@ import { CartContext } from "../../contexts/cartContext";
 
 const MenuCard = ({ data, idx }) => {
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
-  const { id, title, price } = data;
+  const { id, title, price, image } = data;
   const handleOrder = () => {
     cartDispatch({
       type: "ADD_CART",
@@ -21,7 +21,7 @@ const MenuCard = ({ data, idx }) => {
           <Card style={{ border: "none", cursor: "pointer" }}>
             <Card.Img
               variant="top"
-              src={`https://picsum.photos/175?random=${idx}`}
+              src={image}
               height="175"
               className="p-3"
               style={{ objectFit: "cover" }}

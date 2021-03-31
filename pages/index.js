@@ -19,18 +19,8 @@ export default function Home() {
   } = useQuery(ALL_USERS);
 
   const partners = usersData?.users?.filter((item) => item.role === "PARTNER");
-  const paths = partners?.map((partner) => ({
-    params: { id: partner?.id },
-  }));
 
-  const { loading, error, data, refetch } = useQuery(ALL_PRODUCTS);
-
-  const products = data?.products?.filter((item) => {
-    console.log(item);
-  });
-
-  console.log(paths);
-  console.log(products);
+  console.log("pt", partners);
 
   return (
     <>
@@ -45,6 +35,7 @@ export default function Home() {
             </Col>
           </Row>
           <Row>
+            {console.log(partners)}
             {partners?.map((partner, idx) => (
               <PopularCard key={idx} data={partner} idx={idx} />
             ))}

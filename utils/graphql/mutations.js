@@ -47,3 +47,29 @@ export const INSERT_ORDERS = gql`
     }
   }
 `;
+
+export const INSERT_PRODUCT = gql`
+  mutation($title: String!, $price: Int!, $image: String!) {
+    createProduct(input: { title: $title, price: $price, image: $image }) {
+      id
+      title
+      price
+      image
+      createdBy {
+        id
+        email
+      }
+    }
+  }
+`;
+
+export const DELETE_PRODUCT = gql`
+  mutation($id: String!) {
+    deleteProduct(id: $id) {
+      id
+      title
+      price
+      image
+    }
+  }
+`;

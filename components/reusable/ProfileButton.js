@@ -23,13 +23,13 @@ const ProfileButton = () => {
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
 
   const handleLogout = () => {
+    router.pathname !== "/" && router.push("/");
     cartDispatch({
       type: "EMPTY_CART",
     });
     userDispatch({
       type: "LOGOUT",
     });
-    router.pathname !== "/" && router.push("/");
   };
 
   return (

@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useContext, useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import {
@@ -18,6 +19,7 @@ import { INSERT_TRANSACTION, INSERT_ORDERS } from "../utils/graphql/mutations";
 import CartOrder from "../components/reusable/CartOrder";
 
 const Cart = () => {
+  const router = useRouter();
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
 
   const [quantity, setQuantity] = useState(0);
@@ -45,7 +47,10 @@ const Cart = () => {
       const { data: ordersData } = await insertOrders({
         variables: { inputs: products },
       });
-      console.log(ordersData);
+      ordersData && router.push("/profile");
+      cartDispatch({
+        type: "EMPTY_CART",
+      });
     } catch (error) {
       console.log(error);
     }
