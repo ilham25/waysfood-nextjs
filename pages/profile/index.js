@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useEffect } from "react";
-import { useQuery } from "@apollo/client";
+import { useContext, useEffect, useState } from "react";
+import { useQuery, useMutation } from "@apollo/client";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 // State Management
 import { UserContext } from "../../contexts/userContext";
@@ -11,6 +12,7 @@ import HistoryCard from "../../components/reusable/HistoryCard";
 
 // GraphQL Query and Mutation
 import { ALL_TRANSACTIONS, ALL_ORDERS } from "../../utils/graphql/queries";
+import { UPDATE_TRANSACTION } from "../../utils/graphql/mutations";
 
 // Assets
 const imgProfileBig = "/assets/img/profile-big.png";
@@ -30,6 +32,30 @@ const Profile = () => {
     role,
   } = userState.loggedUser;
 
+  const [alert, setAlert] = useState(null);
+  const hideAlert = () => {
+    setAlert(null);
+  };
+  const showAlert = (title, message, isVerified, id) => {
+    setAlert(
+      <SweetAlert
+        info
+        showCancel={isVerified}
+        confirmBtnText="Confirm"
+        confirmBtnBsStyle="success"
+        title={title}
+        onConfirm={() => {
+          hideAlert();
+          isVerified && handleApprove(id, "success");
+        }}
+        onCancel={() => hideAlert()}
+        focusCancelBtn
+      >
+        {message}
+      </SweetAlert>
+    );
+  };
+
   const {
     loading: transLoading,
     error: transError,
@@ -41,6 +67,18 @@ const Profile = () => {
     if (role === "PARTNER") return item.partner.id === id;
     return item.createdBy.id === id;
   });
+
+  const [updateTransaction] = useMutation(UPDATE_TRANSACTION);
+
+  const handleApprove = async (id, status) => {
+    try {
+      const { data } = await updateTransaction({ variables: { id, status } });
+      console.log("dt", data);
+      transRefetch();
+    } catch (error) {
+      console.log("inc", error);
+    }
+  };
 
   useEffect(() => {
     transRefetch();
@@ -117,29 +155,11 @@ const Profile = () => {
                 </Col>
               </Row>
               <Row>
-                {/* {cartState.transactions.map((tran, index) =>
-                  userState.loggedUser.userrole == 1
-                    ? tran.restaurant.title ===
-                        userState.loggedUser.fullname && (
-                        <HistoryCard
-                          key={index}
-                          userrole={userrole}
-                          data={tran}
-                        />
-                      )
-                    : tran.user.fullname === userState.loggedUser.fullname && (
-                        <HistoryCard
-                          key={index}
-                          userrole={userrole}
-                          data={tran}
-                        />
-                      )
-                )} */}
                 {transLoading ? (
                   <h3>Loading...</h3>
                 ) : (
                   transFiltered?.map((trans, idx) => (
-                    <HistoryCard key={idx} data={trans} />
+                    <HistoryCard key={idx} data={trans} showAlert={showAlert} />
                   ))
                 )}
               </Row>
@@ -147,6 +167,7 @@ const Profile = () => {
           </Row>
         </Container>
       </div>
+      {alert}
     </>
   );
 };

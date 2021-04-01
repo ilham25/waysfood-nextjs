@@ -36,8 +36,6 @@ function Income() {
     (trans) => trans.partner.id === id
   );
 
-  console.log(transactions);
-
   const handleApprove = async (id, status) => {
     try {
       const { data } = await updateTransaction({ variables: { id, status } });
