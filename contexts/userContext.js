@@ -5,9 +5,15 @@ export const UserContext = createContext();
 const initialState = {
   isLogin: false,
   users: [],
-  loggedUser: null,
-  orderLocation: { lng: 106.735157, lat: -6.301431 },
-  orderPlace: "",
+  loggedUser: {
+    id: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    image: "",
+    role: "",
+    phone: "",
+  },
   loading: true,
 };
 
@@ -36,10 +42,19 @@ const reducer = (state, action) => {
     case "AUTH_ERROR":
     case "LOGOUT":
       localStorage.removeItem("token");
+      localStorage.removeItem("userId");
       return {
         ...state,
         isLogin: false,
-        loggedUser: null,
+        loggedUser: {
+          id: "",
+          firstName: "",
+          lastName: "",
+          email: "",
+          image: "",
+          role: "",
+          phone: "",
+        },
         loading: false,
       };
     case "ORDER_LOC":

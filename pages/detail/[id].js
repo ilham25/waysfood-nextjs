@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { useContext } from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import { motion } from "framer-motion";
 
 // State Management
 import { CartContext } from "../../contexts/cartContext";
@@ -10,6 +11,8 @@ import client from "../../utils/apollo-client";
 import { ALL_PRODUCTS, ALL_USERS } from "../../utils/graphql/queries";
 
 import MenuCard from "../../components/reusable/MenuCard";
+
+import { pageInit } from "../../utils/animVariants";
 
 export const getStaticPaths = async () => {
   // const { loading, error, data, refetch } = useQuery(ALL_USERS);
@@ -53,7 +56,13 @@ const Detail = ({ products }) => {
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
   return (
     <>
-      <div className="bg-grey py-5 mt-4">
+      <motion.div
+        variants={pageInit}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        className="bg-grey py-5 mt-4"
+      >
         <Container>
           <Row>
             <Col xs={12}>
@@ -68,7 +77,7 @@ const Detail = ({ products }) => {
             ))}
           </Row>
         </Container>
-      </div>
+      </motion.div>
     </>
   );
 };

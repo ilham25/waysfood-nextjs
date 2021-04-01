@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
 import { Container, Col, Row, Form, Button, Modal } from "react-bootstrap";
+import { motion } from "framer-motion";
 import SweetAlert from "react-bootstrap-sweetalert";
 
 // State Management
@@ -15,6 +16,8 @@ import { ALL_PRODUCTS, EACH_PRODUCT } from "../utils/graphql/queries";
 import CustomFormInput from "../components/static/CustomFormInput";
 import CustomFormFile from "../components/static/CustomFormFile";
 import MenuCardAdvanced from "../components/reusable/MenuCardAdvanced";
+
+import { pageInit } from "../utils/animVariants";
 
 const Add = () => {
   const router = useRouter();
@@ -32,19 +35,34 @@ const Add = () => {
   const hideAlert = () => {
     setAlert(null);
   };
-  const showAlert = () => {
+  const showAlert = (isDanger) => {
     setAlert(
-      <SweetAlert
-        success
-        confirmBtnText="Confirm"
-        confirmBtnBsStyle="success"
-        title="Success!"
-        onConfirm={() => hideAlert()}
-        onCancel={() => hideAlert()}
-        focusCancelBtn
-      >
-        Your product has been updated
-      </SweetAlert>
+      isDanger ? (
+        <SweetAlert
+          danger
+          showCancel
+          confirmBtnText="Confirm"
+          confirmBtnBsStyle="danger"
+          title="Are you sure?"
+          onConfirm={() => hideAlert()}
+          onCancel={() => hideAlert()}
+          focusCancelBtn
+        >
+          Your product will be deleted
+        </SweetAlert>
+      ) : (
+        <SweetAlert
+          success
+          confirmBtnText="Confirm"
+          confirmBtnBsStyle="success"
+          title="Success!"
+          onConfirm={() => hideAlert()}
+          onCancel={() => hideAlert()}
+          focusCancelBtn
+        >
+          Your product has been updated
+        </SweetAlert>
+      )
     );
   };
 
@@ -106,9 +124,19 @@ const Add = () => {
     });
   };
 
+  useEffect(() => {
+    !userState.isLogin && router.push("/");
+  }, []);
+
   return (
     <>
-      <div className="bg-grey py-5 mt-4">
+      <motion.div
+        variants={pageInit}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        className="bg-grey py-5 mt-4"
+      >
         <Container>
           <Row className="mb-4">
             <Col xs={12}>
@@ -189,12 +217,13 @@ const Add = () => {
                   refetch={refetch}
                   setEditId={setEditId}
                   setForm={setForm}
+                  showAlert={showAlert}
                 />
               ))
             )}
           </Row>
         </Container>
-      </div>
+      </motion.div>
       {alert}
     </>
   );

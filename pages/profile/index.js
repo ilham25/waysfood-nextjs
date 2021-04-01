@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
+import { motion } from "framer-motion";
 import SweetAlert from "react-bootstrap-sweetalert";
 
 // State Management
@@ -13,6 +14,8 @@ import HistoryCard from "../../components/reusable/HistoryCard";
 // GraphQL Query and Mutation
 import { ALL_TRANSACTIONS, ALL_ORDERS } from "../../utils/graphql/queries";
 import { UPDATE_TRANSACTION } from "../../utils/graphql/mutations";
+
+import { pageInit } from "../../utils/animVariants";
 
 // Assets
 const imgProfileBig = "/assets/img/profile-big.png";
@@ -81,6 +84,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
+    !userState.isLogin && router.push("/");
     transRefetch();
   }, []);
 
@@ -88,7 +92,13 @@ const Profile = () => {
   console.log(transFiltered);
   return (
     <>
-      <div className="bg-grey py-5 mt-4">
+      <motion.div
+        variants={pageInit}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        className="bg-grey py-5 mt-4"
+      >
         <Container>
           <Row className="mb-4">
             <Col xs={12} md={12} lg={7}>
@@ -166,7 +176,7 @@ const Profile = () => {
             </Col>
           </Row>
         </Container>
-      </div>
+      </motion.div>
       {alert}
     </>
   );

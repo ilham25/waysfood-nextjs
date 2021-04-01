@@ -1,4 +1,10 @@
 import Head from "next/head";
+import { useContext } from "react";
+import { useQuery } from "@apollo/client";
+
+import { UserContext } from "../../contexts/userContext";
+
+import { EACH_USER } from "../../utils/graphql/queries";
 
 import Header from "./Header";
 

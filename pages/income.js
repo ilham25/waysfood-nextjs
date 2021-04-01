@@ -11,12 +11,15 @@ import {
   Table,
 } from "react-bootstrap";
 import { useQuery, useMutation } from "@apollo/client";
+import { motion } from "framer-motion";
 
 // State Management
 import { UserContext } from "../contexts/userContext";
 import { CartContext } from "../contexts/cartContext";
 import { ALL_TRANSACTIONS } from "../utils/graphql/queries";
 import { UPDATE_TRANSACTION } from "../utils/graphql/mutations";
+
+import { pageInit } from "../utils/animVariants";
 
 // Assets
 const actionSuccess = "/assets/svg/action-success.svg";
@@ -45,6 +48,10 @@ function Income() {
       console.log("inc", error);
     }
   };
+
+  useEffect(() => {
+    !userState.isLogin && router.push("/");
+  }, []);
 
   const handleAction = (id, status) => {
     switch (status) {
@@ -104,7 +111,7 @@ function Income() {
         return (
           <>
             <td className="text-center">
-              <p className="text-success">Success</p>;
+              <p className="text-success">Success</p>
             </td>
             <td className="text-center">
               <img src={actionSuccess} height="20" alt="success action" />
@@ -123,7 +130,13 @@ function Income() {
   }, []);
 
   return (
-    <div className="bg-grey py-5 mt-4">
+    <motion.div
+      variants={pageInit}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      className="bg-grey py-5 mt-4"
+    >
       <Container>
         <Row className="mb-4">
           <Col xs={12}>
@@ -168,7 +181,7 @@ function Income() {
           </Col>
         </Row>
       </Container>
-    </div>
+    </motion.div>
   );
 }
 

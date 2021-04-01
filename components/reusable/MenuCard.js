@@ -1,8 +1,11 @@
 import { useContext } from "react";
 import { Col, Card, Button } from "react-bootstrap";
+import { motion } from "framer-motion";
 
 // State Management
 import { CartContext } from "../../contexts/cartContext";
+
+import { cardInit } from "../../utils/animVariants";
 
 const MenuCard = ({ data, idx }) => {
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
@@ -16,9 +19,23 @@ const MenuCard = ({ data, idx }) => {
 
   return (
     <>
-      <Col xs={12} md={4} lg={3} className="mb-4">
+      <Col
+        as={motion.div}
+        variants={cardInit}
+        xs={12}
+        md={4}
+        lg={3}
+        className="mb-4"
+      >
         <div>
-          <Card style={{ border: "none", cursor: "pointer" }}>
+          <Card
+            as={motion.div}
+            whileHover={{
+              scale: 1.1,
+            }}
+            transition={{ type: "spring", stiffness: 600 }}
+            style={{ border: "none", cursor: "pointer" }}
+          >
             <Card.Img
               variant="top"
               src={image}

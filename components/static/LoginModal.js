@@ -8,7 +8,7 @@ import { UserContext } from "../../contexts/userContext";
 import { ModalContext } from "../../contexts/modalContext";
 
 // GraphQL Query or Mutation
-import { LOGIN_MUTATION } from "../../utils/graphql/mutations";
+import { LOGIN_MUTATION, INSERT_TOKEN } from "../../utils/graphql/mutations";
 
 // Components
 import CustomFormInput from "./CustomFormInput";
@@ -25,6 +25,7 @@ export default function LoginModal({}) {
   };
 
   const [handleLogin, { error }] = useMutation(LOGIN_MUTATION);
+  const [handleToken, { error: tokenError }] = useMutation(INSERT_TOKEN);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,6 +41,7 @@ export default function LoginModal({}) {
         type: "LOGIN",
         payload: data.login,
       });
+
       data && modalDispatch({ type: "CLOSE_LOGIN" });
     } catch (error) {
       console.log(error);

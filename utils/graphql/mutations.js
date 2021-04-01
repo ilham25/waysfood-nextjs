@@ -131,3 +131,12 @@ export const UPDATE_TRANSACTION = gql`
     }
   }
 `;
+
+export const INSERT_TOKEN = gql`
+  mutation($token: String!) {
+    createTokenList(input: { token: $token }) {
+      id
+      token
+    }
+  }
+`;

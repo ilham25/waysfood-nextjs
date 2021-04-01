@@ -2,11 +2,14 @@ import { useRouter } from "next/router";
 import { useContext } from "react";
 
 import { Container, Col, Row, Card, Button } from "react-bootstrap";
+import { motion } from "framer-motion";
 
 // State Management
 import { CartContext } from "../../contexts/cartContext";
 import { UserContext } from "../../contexts/userContext";
 import { ModalContext } from "../../contexts/modalContext";
+
+import { cardInit } from "../../utils/animVariants";
 
 const RestaurantCard = ({ data, idx, showAlert }) => {
   const router = useRouter();
@@ -56,10 +59,15 @@ const RestaurantCard = ({ data, idx, showAlert }) => {
   };
   return (
     <>
-      <Col sm={3}>
+      <Col as={motion.div} variants={cardInit} sm={3} className="mb-4">
         <Card
           style={{ border: "none", cursor: "pointer" }}
           onClick={handleClick}
+          as={motion.div}
+          whileHover={{
+            scale: 1.1,
+          }}
+          transition={{ type: "spring", stiffness: 600 }}
         >
           <Card.Img
             variant="top"

@@ -73,7 +73,7 @@ function HistoryCard({ data, showAlert }) {
   };
   const handleClick = () => {
     if (userState.loggedUser.role === "PARTNER") {
-      router.push("/");
+      router.push("/income");
     } else {
       switch (status) {
         case "waiting":

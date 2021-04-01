@@ -9,21 +9,27 @@ import {
   InputGroup,
   FormControl,
 } from "react-bootstrap";
+import { motion } from "framer-motion";
+
 import SweetAlert from "react-bootstrap-sweetalert";
 
 // State Management
 import { CartContext } from "../contexts/cartContext";
+import { UserContext } from "../contexts/userContext";
 
 // GraphQL Query and Mutation
 import { INSERT_TRANSACTION, INSERT_ORDERS } from "../utils/graphql/mutations";
 
 import CartOrder from "../components/reusable/CartOrder";
 
+import { pageInit } from "../utils/animVariants";
+
 const emptyIllust = "/assets/svg/cart_empty.svg";
 
 const Cart = () => {
   const router = useRouter();
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
+  const { state: userState, dispatch: userDispatch } = useContext(UserContext);
 
   const [quantity, setQuantity] = useState(0);
   const [price, setPrice] = useState(0);
@@ -91,11 +97,22 @@ const Cart = () => {
     setTotal(tmpPrice + delivery);
   }, [cartState.carts]);
 
+  useEffect(() => {
+    !userState.isLogin && router.push("/");
+  }, []);
+
   return (
     <>
       {cartState.carts.length == 0 ? (
         <>
-          <Container className="d-flex justify-content-center align-items-center flex-column">
+          <Container
+            as={motion.div}
+            variants={pageInit}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="d-flex justify-content-center align-items-center flex-column"
+          >
             <img src={emptyIllust} alt="illustration" height="450" />
             <h2 className="text-secondary font-weight-normal">
               Look's like your cart is empty
@@ -106,7 +123,13 @@ const Cart = () => {
           </Container>
         </>
       ) : (
-        <div className="bg-grey py-5 mt-4">
+        <motion.div
+          variants={pageInit}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          className="bg-grey py-5 mt-4"
+        >
           <Container>
             <Row className="mb-4">
               <Col sm={12}>
@@ -183,7 +206,7 @@ const Cart = () => {
               </Col>
             </Row>
           </Container>
-        </div>
+        </motion.div>
       )}
       {alert}
     </>

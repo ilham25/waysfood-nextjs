@@ -82,3 +82,17 @@ export const EACH_PRODUCT = gql`
     }
   }
 `;
+
+export const EACH_USER = gql`
+  query($id: String!) {
+    user(id: $id) {
+      id
+      firstName
+      lastName
+      email
+      phoneNumber
+      role
+      image
+    }
+  }
+`;
