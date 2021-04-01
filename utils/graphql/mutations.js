@@ -23,6 +23,7 @@ export const REGISTER_MUTATION = gql`
     $password: String!
     $firstName: String!
     $lastName: String
+    $image: String
     $phoneNumber: PhoneNumber
     $role: RegisterRole
   ) {
@@ -32,6 +33,7 @@ export const REGISTER_MUTATION = gql`
         password: $password
         firstName: $firstName
         lastName: $lastName
+        image: $image
         phoneNumber: $phoneNumber
         role: $role
       }

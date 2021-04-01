@@ -34,12 +34,13 @@ export default function RegisterModal() {
       password: e.target.password.value,
       firstName: e.target.firstName.value,
       lastName: e.target.lastName.value,
-      phone: e.target.phone.value,
+      image: e.target.image.value,
+      phoneNumber: e.target.phoneNumber.value,
       role: e.target.role.value,
     };
     try {
       const { data } = await handleRegister({
-        variables: { ...userData, phoneNumber: userData.phone },
+        variables: userData,
       });
       userDispatch({
         type: "LOGIN",
@@ -77,7 +78,7 @@ export default function RegisterModal() {
               required
             />
           </Form.Group>
-          <Form.Group controlId="fullname">
+          <Form.Group controlId="firstName">
             <CustomFormInput
               type="text"
               placeholder="First Name"
@@ -85,7 +86,7 @@ export default function RegisterModal() {
               required
             />
           </Form.Group>
-          <Form.Group controlId="fullname">
+          <Form.Group controlId="lastName">
             <CustomFormInput
               type="text"
               placeholder="Last Name"
@@ -93,11 +94,19 @@ export default function RegisterModal() {
               required
             />
           </Form.Group>
+          <Form.Group controlId="image">
+            <CustomFormInput
+              type="text"
+              placeholder="Image URL"
+              name="image"
+              required
+            />
+          </Form.Group>
           <Form.Group controlId="phone">
             <CustomFormInput
               type="text"
               placeholder="Phone"
-              name="phone"
+              name="phoneNumber"
               required
             />
           </Form.Group>
