@@ -19,6 +19,8 @@ import { INSERT_TRANSACTION, INSERT_ORDERS } from "../utils/graphql/mutations";
 
 import CartOrder from "../components/reusable/CartOrder";
 
+const emptyIllust = "/assets/svg/cart_empty.svg";
+
 const Cart = () => {
   const router = useRouter();
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
@@ -91,84 +93,98 @@ const Cart = () => {
 
   return (
     <>
-      <div className="bg-grey py-5 mt-4">
-        <Container>
-          <Row className="mb-4">
-            <Col sm={12}>
-              <h1 className="heading font-weight-bold">Restaurant</h1>
-            </Col>
-          </Row>
+      {cartState.carts.length == 0 ? (
+        <>
+          <Container className="d-flex justify-content-center align-items-center flex-column">
+            <img src={emptyIllust} alt="illustration" height="450" />
+            <h2 className="text-secondary font-weight-normal">
+              Look's like your cart is empty
+            </h2>
+            <Button variant="brown mt-3 py-1" onClick={() => router.push("/")}>
+              Back to home
+            </Button>
+          </Container>
+        </>
+      ) : (
+        <div className="bg-grey py-5 mt-4">
+          <Container>
+            <Row className="mb-4">
+              <Col sm={12}>
+                <h1 className="heading font-weight-bold">Restaurant</h1>
+              </Col>
+            </Row>
 
-          <Row>
-            <Col sm={12}>
-              <h5 className="text-brown font-weight-normal">
-                Review your order
-              </h5>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={12} lg={7}>
-              <hr className="divider" />
-              {cartState.carts.map((cart, idx) => (
-                <CartOrder key={idx} data={cart} idx={idx} />
-              ))}
-            </Col>
-            <Col lg={5}>
-              <hr className="divider d-none d-lg-block" />
-              <Row>
-                <Col xs={6} lg={6}>
-                  <p>Subtotal</p>
-                </Col>
-                <Col xs={6} lg={6}>
-                  <p className="text-right text-danger">
-                    Rp. {price.toLocaleString()}
-                  </p>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={6} lg={6}>
-                  <p>Qty</p>
-                </Col>
-                <Col xs={6} lg={6}>
-                  <p className="text-right">{quantity}</p>
-                </Col>
-              </Row>
-              <Row className="pb-0">
-                <Col xs={6} lg={6}>
-                  <p className="mb-0">Ongkir</p>
-                </Col>
-                <Col xs={6} lg={6}>
-                  <p className="text-right text-danger mb-0">
-                    Rp. {delivery.toLocaleString()}
-                  </p>
-                </Col>
-              </Row>
-              <hr className="divider" />
-              <Row className="pb-0">
-                <Col xs={6} lg={6}>
-                  <p className="mb-0 text-danger font-weight-bold">Total</p>
-                </Col>
-                <Col xs={6} lg={6}>
-                  <p className="text-right text-danger font-weight-bold mb-0">
-                    Rp. {total.toLocaleString()}
-                  </p>
-                </Col>
-              </Row>
-              <Row className="mt-5 justify-content-end">
-                <Col sm={8} className="text-right mt-5">
-                  <Button
-                    variant="brown"
-                    className="w-100"
-                    onClick={handleOrder}
-                  >
-                    Order
-                  </Button>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
-      </div>
+            <Row>
+              <Col sm={12}>
+                <h5 className="text-brown font-weight-normal">
+                  Review your order
+                </h5>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12} lg={7}>
+                <hr className="divider" />
+                {cartState.carts.map((cart, idx) => (
+                  <CartOrder key={idx} data={cart} idx={idx} />
+                ))}
+              </Col>
+              <Col lg={5}>
+                <hr className="divider d-none d-lg-block" />
+                <Row>
+                  <Col xs={6} lg={6}>
+                    <p>Subtotal</p>
+                  </Col>
+                  <Col xs={6} lg={6}>
+                    <p className="text-right text-danger">
+                      Rp. {price.toLocaleString()}
+                    </p>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={6} lg={6}>
+                    <p>Qty</p>
+                  </Col>
+                  <Col xs={6} lg={6}>
+                    <p className="text-right">{quantity}</p>
+                  </Col>
+                </Row>
+                <Row className="pb-0">
+                  <Col xs={6} lg={6}>
+                    <p className="mb-0">Ongkir</p>
+                  </Col>
+                  <Col xs={6} lg={6}>
+                    <p className="text-right text-danger mb-0">
+                      Rp. {delivery.toLocaleString()}
+                    </p>
+                  </Col>
+                </Row>
+                <hr className="divider" />
+                <Row className="pb-0">
+                  <Col xs={6} lg={6}>
+                    <p className="mb-0 text-danger font-weight-bold">Total</p>
+                  </Col>
+                  <Col xs={6} lg={6}>
+                    <p className="text-right text-danger font-weight-bold mb-0">
+                      Rp. {total.toLocaleString()}
+                    </p>
+                  </Col>
+                </Row>
+                <Row className="mt-5 justify-content-end">
+                  <Col sm={8} className="text-right mt-5">
+                    <Button
+                      variant="brown"
+                      className="w-100"
+                      onClick={handleOrder}
+                    >
+                      Order
+                    </Button>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      )}
       {alert}
     </>
   );

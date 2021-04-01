@@ -1,5 +1,7 @@
 import { useQuery } from "@apollo/client";
+import { useState } from "react";
 import { Container, Col, Row } from "react-bootstrap";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 // GraphQL Query or Mutation
 import { ALL_USERS, ALL_PRODUCTS } from "../utils/graphql/queries";
@@ -11,6 +13,25 @@ import LoginModal from "../components/static/LoginModal";
 import RegisterModal from "../components/static/RegisterModal";
 
 export default function Home() {
+  const [alert, setAlert] = useState(null);
+  const hideAlert = () => {
+    setAlert(null);
+  };
+  const showAlert = () => {
+    setAlert(
+      <SweetAlert
+        warning
+        confirmBtnText="Close"
+        confirmBtnBsStyle="danger"
+        title="Your cart is not empty!"
+        onConfirm={() => hideAlert()}
+        onCancel={() => hideAlert()}
+      >
+        Please empty your cart before changing restaurant
+      </SweetAlert>
+    );
+  };
+
   const {
     loading: usersLoading,
     error: usersError,
@@ -37,7 +58,12 @@ export default function Home() {
           <Row>
             {console.log(partners)}
             {partners?.map((partner, idx) => (
-              <PopularCard key={idx} data={partner} idx={idx} />
+              <PopularCard
+                key={idx}
+                data={partner}
+                idx={idx}
+                showAlert={showAlert}
+              />
             ))}
           </Row>
           <Row className="mt-5 mb-4">
@@ -47,13 +73,19 @@ export default function Home() {
           </Row>
           <Row>
             {partners?.map((partner, idx) => (
-              <RestaurantCard key={idx} data={partner} idx={idx} />
+              <RestaurantCard
+                key={idx}
+                data={partner}
+                idx={idx}
+                showAlert={showAlert}
+              />
             ))}
           </Row>
         </Container>
       )}
       <LoginModal />
       <RegisterModal />
+      {alert}
     </>
   );
 }

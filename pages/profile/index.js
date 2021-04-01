@@ -20,7 +20,15 @@ const Profile = () => {
   const router = useRouter();
   const { state: userState, dispatch: userDispatch } = useContext(UserContext);
 
-  const { id, firstName, lastName, email, phone, image } = userState.loggedUser;
+  const {
+    id,
+    firstName,
+    lastName,
+    email,
+    phone,
+    image,
+    role,
+  } = userState.loggedUser;
 
   const {
     loading: transLoading,
@@ -29,9 +37,10 @@ const Profile = () => {
     refetch: transRefetch,
   } = useQuery(ALL_TRANSACTIONS);
 
-  const transFiltered = transData?.transactions?.filter(
-    (item) => item.partner.id === id
-  );
+  const transFiltered = transData?.transactions?.filter((item) => {
+    if (role === "PARTNER") return item.partner.id === id;
+    return item.createdBy.id === id;
+  });
 
   useEffect(() => {
     transRefetch();
