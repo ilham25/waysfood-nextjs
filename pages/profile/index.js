@@ -20,7 +20,7 @@ const Profile = () => {
   const router = useRouter();
   const { state: userState, dispatch: userDispatch } = useContext(UserContext);
 
-  const { id, firstName, lastName, email, phone } = userState.loggedUser;
+  const { id, firstName, lastName, email, phone, image } = userState.loggedUser;
 
   const {
     loading: transLoading,
@@ -29,11 +29,16 @@ const Profile = () => {
     refetch: transRefetch,
   } = useQuery(ALL_TRANSACTIONS);
 
+  const transFiltered = transData?.transactions?.filter(
+    (item) => item.partner.id === id
+  );
+
   useEffect(() => {
     transRefetch();
   }, []);
 
   console.log(transData);
+  console.log(transFiltered);
   return (
     <>
       <div className="bg-grey py-5 mt-4">
@@ -48,11 +53,7 @@ const Profile = () => {
               <Row className="mb-2">
                 <Col sm={12} md={4}>
                   <img
-                    src={
-                      userState.loggedUser.role === "PARTNER"
-                        ? bensu
-                        : imgProfileBig
-                    }
+                    src={image ? image : imgProfileBig}
                     alt="profile photo"
                     className="w-100 mb-4 mb-sm-0"
                     height="222"
@@ -128,7 +129,7 @@ const Profile = () => {
                 {transLoading ? (
                   <h3>Loading...</h3>
                 ) : (
-                  transData?.transactions?.map((trans, idx) => (
+                  transFiltered?.map((trans, idx) => (
                     <HistoryCard key={idx} data={trans} />
                   ))
                 )}

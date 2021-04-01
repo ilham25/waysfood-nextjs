@@ -78,7 +78,11 @@ const ProfileButton = () => {
           }}
         >
           <img
-            src={userState.loggedUser.role === "PARTNER" ? bensu : imgProfile}
+            src={
+              userState.loggedUser.image
+                ? userState.loggedUser.image
+                : imgProfile
+            }
             alt="photo"
             width="64"
             height="64"

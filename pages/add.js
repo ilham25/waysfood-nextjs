@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
 import { Container, Col, Row, Form, Button, Modal } from "react-bootstrap";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 // State Management
 import { UserContext } from "../contexts/userContext";
@@ -27,6 +28,26 @@ const Add = () => {
   });
   const { title, price, image } = form;
 
+  const [alert, setAlert] = useState(null);
+  const hideAlert = () => {
+    setAlert(null);
+  };
+  const showAlert = () => {
+    setAlert(
+      <SweetAlert
+        success
+        confirmBtnText="Confirm"
+        confirmBtnBsStyle="success"
+        title="Success!"
+        onConfirm={() => hideAlert()}
+        onCancel={() => hideAlert()}
+        focusCancelBtn
+      >
+        Your product has been updated
+      </SweetAlert>
+    );
+  };
+
   const [insertProduct, { error: insErr }] = useMutation(INSERT_PRODUCT);
   const [updateProduct, { error: updErr }] = useMutation(UPDATE_PRODUCT);
 
@@ -37,13 +58,13 @@ const Add = () => {
   );
 
   const addProduct = async () => {
-    console.log("aoweko");
     try {
       console.log("lel");
       const { data } = await insertProduct({
         variables: { ...form, price: parseInt(form.price) },
       });
       data && refetch();
+      data && showAlert();
       setForm({
         title: "",
         price: 0,
@@ -60,6 +81,7 @@ const Add = () => {
         variables: { ...form, price: parseInt(form.price), id: editId },
       });
       data && refetch();
+      data && showAlert();
       setEditId("");
       setForm({
         title: "",
@@ -173,6 +195,7 @@ const Add = () => {
           </Row>
         </Container>
       </div>
+      {alert}
     </>
   );
 };
