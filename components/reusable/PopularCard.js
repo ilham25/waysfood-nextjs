@@ -8,7 +8,7 @@ import { CartContext } from "../../contexts/cartContext";
 import { UserContext } from "../../contexts/userContext";
 import { ModalContext } from "../../contexts/modalContext";
 
-const PopularCard = ({ data, idx }) => {
+const PopularCard = ({ data, idx, showAlert }) => {
   const router = useRouter();
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
   const { state: userState, dispatch: userDispatch } = useContext(UserContext);
