@@ -17,6 +17,39 @@ export const LOGIN_MUTATION = gql`
   }
 `;
 
+export const REGISTER_MUTATION = gql`
+  mutation(
+    $email: EmailAddress!
+    $password: String!
+    $firstName: String!
+    $lastName: String
+    $phoneNumber: PhoneNumber
+    $role: RegisterRole
+  ) {
+    register(
+      input: {
+        email: $email
+        password: $password
+        firstName: $firstName
+        lastName: $lastName
+        phoneNumber: $phoneNumber
+        role: $role
+      }
+    ) {
+      token
+      user {
+        id
+        firstName
+        lastName
+        email
+        phoneNumber
+        role
+        image
+      }
+    }
+  }
+`;
+
 export const INSERT_TRANSACTION = gql`
   mutation($partnerId: String!) {
     createTransaction(input: { partnerId: $partnerId, status: "waiting" }) {

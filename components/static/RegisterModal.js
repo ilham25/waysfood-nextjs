@@ -1,6 +1,7 @@
 import { useContext } from "react";
 
 import { Modal, Button, Form } from "react-bootstrap";
+import { useMutation } from "@apollo/client";
 
 // State Management
 import { UserContext } from "../../contexts/userContext";
@@ -8,6 +9,7 @@ import { ModalContext } from "../../contexts/modalContext";
 
 // Components
 import CustomFormInput from "./CustomFormInput";
+import { REGISTER_MUTATION } from "../../utils/graphql/mutations";
 
 // Assets
 const imgProfile = "/assets/img/profile.png";
@@ -23,29 +25,31 @@ export default function RegisterModal() {
     modalDispatch({ type: "OPEN_LOGIN" });
   };
 
-  const handleRegister = (data) => {
-    const userData = {
-      id,
-      email,
-      password,
-      fullname,
-      gender,
-      phone,
-      role,
-      photo: imgProfile,
-    };
-  };
+  const [handleRegister, { error }] = useMutation(REGISTER_MUTATION);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const userData = {
       email: e.target.email.value,
       password: e.target.password.value,
-      fullname: e.target.fullname.value,
-      gender: e.target.gender.value,
+      firstName: e.target.firstName.value,
+      lastName: e.target.lastName.value,
       phone: e.target.phone.value,
-      userrole: e.target.userrole.value,
+      role: e.target.role.value,
     };
+    try {
+      const { data } = await handleRegister({
+        variables: { ...userData, phoneNumber: userData.phone },
+      });
+      userDispatch({
+        type: "LOGIN",
+        payload: data.register,
+      });
+      data && modalDispatch({ type: "CLOSE_REGISTER" });
+      console.log(userData);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <Modal
@@ -76,8 +80,16 @@ export default function RegisterModal() {
           <Form.Group controlId="fullname">
             <CustomFormInput
               type="text"
-              placeholder="Full Name"
-              name="fullName"
+              placeholder="First Name"
+              name="firstName"
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="fullname">
+            <CustomFormInput
+              type="text"
+              placeholder="Last Name"
+              name="lastName"
               required
             />
           </Form.Group>
