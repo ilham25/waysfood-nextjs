@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useContext, useState, useEffect } from "react";
 
 import { Dropdown } from "react-bootstrap";
+import { motion } from "framer-motion";
 
 // State Management
 import { CartContext } from "../../contexts/cartContext";
@@ -13,6 +14,7 @@ const iconProfile = "/assets/svg/profile.svg";
 const iconAddProduct = "/assets/svg/addproduct.svg";
 const iconLogout = "/assets/svg/logout.svg";
 const iconCart = "/assets/svg/cart.svg";
+const transCart = "/assets/svg/transaction.svg";
 const imgProfile = "/assets/img/profile.png";
 const bensu = "/assets/img/restaurant/bensu.png";
 
@@ -38,7 +40,13 @@ const ProfileButton = () => {
         href={userState.loggedUser.role === "PARTNER" ? "/income" : "/cart"}
       >
         <a>
-          <div style={{ width: "40px", height: "40px", position: "relative" }}>
+          <motion.div
+            whileHover={{
+              rotate: [0, 20, -20, 20, -20, 0],
+              transition: { duration: 0.5 },
+            }}
+            style={{ width: "40px", height: "40px", position: "relative" }}
+          >
             {cartState.carts.length > 0 && (
               <div
                 className="cart-badge"
@@ -63,8 +71,14 @@ const ProfileButton = () => {
                 </small>
               </div>
             )}
-            <img src={iconCart} alt="cart" width="40" />
-          </div>
+            <img
+              src={
+                userState.loggedUser.role === "PARTNER" ? transCart : iconCart
+              }
+              alt="cart"
+              width="40"
+            />
+          </motion.div>
         </a>
       </Link>
       <Dropdown className="ml-2">

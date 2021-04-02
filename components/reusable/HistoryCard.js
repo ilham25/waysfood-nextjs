@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { Col, Card, Row, Button } from "react-bootstrap";
+import { motion } from "framer-motion";
 
 // State Management
 import { UserContext } from "../../contexts/userContext";
@@ -103,8 +104,24 @@ function HistoryCard({ data, showAlert }) {
     }
   };
   return (
-    <Col xs={12} md={12} className="mb-4">
-      <Card style={{ border: "none", cursor: "pointer" }} onClick={handleClick}>
+    <Col
+      as={motion.div}
+      initial={{ y: "50vh" }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5, type: "spring" }}
+      xs={12}
+      md={12}
+      className="mb-4"
+    >
+      <Card
+        as={motion.div}
+        whileHover={{
+          scale: 1.1,
+        }}
+        transition={{ type: "spring", stiffness: 600 }}
+        style={{ border: "none", cursor: "pointer" }}
+        onClick={handleClick}
+      >
         <Card.Body>
           <Row>
             <Col xs={6} md={6}>

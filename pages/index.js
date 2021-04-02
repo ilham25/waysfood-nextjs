@@ -20,17 +20,17 @@ export default function Home() {
   const hideAlert = () => {
     setAlert(null);
   };
-  const showAlert = () => {
+  const showAlert = (title, msg) => {
     setAlert(
       <SweetAlert
         warning
         confirmBtnText="Close"
         confirmBtnBsStyle="danger"
-        title="Your cart is not empty!"
+        title={title}
         onConfirm={() => hideAlert()}
         onCancel={() => hideAlert()}
       >
-        Please empty your cart before changing restaurant
+        {msg}
       </SweetAlert>
     );
   };

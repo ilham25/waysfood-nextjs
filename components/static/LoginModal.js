@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useMutation } from "@apollo/client";
 
-import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import { Modal, Button, Form, Row, Col, Alert } from "react-bootstrap";
 
 // State Management
 import { UserContext } from "../../contexts/userContext";
@@ -56,7 +56,7 @@ export default function LoginModal({}) {
     >
       <Modal.Body className="px-4 py-5">
         <h2 className="text-warning mb-4">Login</h2>
-        {error && <h1>error gan</h1>}
+        {error && <Alert variant="danger">Invalid Credential</Alert>}
         <Form className="d-flex flex-column" onSubmit={handleSubmit}>
           <Form.Group controlId="email">
             <CustomFormInput

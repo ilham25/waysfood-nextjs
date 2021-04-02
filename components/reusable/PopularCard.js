@@ -26,20 +26,8 @@ const PopularCard = ({ data, idx, showAlert }) => {
 
   const handleClick = () => {
     if (userState.isLogin) {
-      if (cartState.carts.length == 0) {
-        cartDispatch({
-          type: "CURRENT_RESTAURANT",
-          payload: {
-            id,
-            fullName: `${firstName} ${lastName}`,
-          },
-        });
-        router.push(`/detail/${id}`);
-      } else {
-        if (
-          cartState.carts.length !== 0 &&
-          cartState.currentRestaurant.id === id
-        ) {
+      if (userState.loggedUser.role !== "PARTNER") {
+        if (cartState.carts.length == 0) {
           cartDispatch({
             type: "CURRENT_RESTAURANT",
             payload: {
@@ -49,8 +37,27 @@ const PopularCard = ({ data, idx, showAlert }) => {
           });
           router.push(`/detail/${id}`);
         } else {
-          showAlert();
+          if (
+            cartState.carts.length !== 0 &&
+            cartState.currentRestaurant.id === id
+          ) {
+            cartDispatch({
+              type: "CURRENT_RESTAURANT",
+              payload: {
+                id,
+                fullName: `${firstName} ${lastName}`,
+              },
+            });
+            router.push(`/detail/${id}`);
+          } else {
+            showAlert(
+              "Your cart is not empty!",
+              "Please empty your cart before changing restaurant"
+            );
+          }
         }
+      } else {
+        showAlert("You are a partner!", "Can't order as a partner");
       }
     } else {
       handleShowLogin();
